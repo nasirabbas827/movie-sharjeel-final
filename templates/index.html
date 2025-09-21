@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MovieSent - Sentiment Analysis</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #74ebd5 0%, #ACB6E5 100%);
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 40px 35px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 25px rgba(0, 0, 0, 0.15);
+            width: 550px;
+            text-align: center;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1 {
+            margin-bottom: 25px;
+            font-size: 28px;
+            color: #333;
+            letter-spacing: 1px;
+        }
+
+        textarea {
+            width: 90%;
+            padding: 14px;
+            margin: 12px 0;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            resize: vertical;
+            font-size: 15px;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+        textarea:focus {
+            border-color: #007BFF;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ccc;
+            margin: 12px 0;
+            font-size: 15px;
+            outline: none;
+            transition: border 0.3s ease;
+        }
+        select:focus {
+            border-color: #007BFF;
+        }
+
+        button {
+            width: 100%;
+            padding: 14px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #007BFF, #00C6FF);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0px 5px 15px rgba(0,123,255,0.3);
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: linear-gradient(135deg, #0056b3, #0096c7);
+            box-shadow: 0px 8px 20px rgba(0,123,255,0.5);
+        }
+
+        .results-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 25px;
+            gap: 10px;
+        }
+
+        .result {
+            flex: 1;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: bold;
+            animation: popIn 0.6s ease;
+        }
+        .positive {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .negative {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        @keyframes popIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>MovieSent - Sentiment Analysis</h1>
+        <form method="POST">
+            <textarea name="review" rows="4" placeholder="Type your review here..." required>{{ review_text }}</textarea>
+            <select name="model">
+                <option value="logreg" {% if model_choice == "logreg" %}selected{% endif %}>Logistic Regression</option>
+                <option value="lstm" {% if model_choice == "lstm" %}selected{% endif %}>LSTM</option>
+            </select>
+            <button type="submit">Analyze Sentiment</button>
+        </form>
+
+        {% if prediction %}
+            <div class="results-container">
+                {% if 'Logistic Regression' in prediction %}
+                    <div class="result {% if 'Positive' in prediction %}positive{% elif 'Negative' in prediction %}negative{% endif %}">
+                        {{ prediction }}
+                    </div>
+                {% elif 'LSTM' in prediction %}
+                    <div class="result {% if 'Positive' in prediction %}positive{% elif 'Negative' in prediction %}negative{% endif %}">
+                        {{ prediction }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
